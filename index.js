@@ -3,7 +3,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 app.get('/', (req, res) => {
-  res.status(200).send('Status 200 OK - Laboratorio CI/CD');
+  res.status(200).send('Status 200 OK - ¡Paso 5 completado automáticamente!');
 });
 
 // Exportamos la app para las pruebas, pero solo escuchamos si se ejecuta directamente
