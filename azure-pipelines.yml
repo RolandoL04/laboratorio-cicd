@@ -39,3 +39,26 @@ stages:
         ArtifactName: 'drop'
         publishLocation: 'Container'
       displayName: 'Publicar artefacto'
+# -----------------------------
+# ETAPA DE DESPLIEGUE CONTINUO
+# -----------------------------
+- stage: CD_Deploy
+  dependsOn: CI_Build_Test
+  condition: succeeded()
+  jobs:
+      - job: Deploy
+        steps:
+        - task: DownloadBuildArtifacts@0
+          inputs:
+            buildType: 'current'
+            downloadType: 'single'
+            artifactName: 'drop'
+            downloadPath: '$(System.ArtifactsDirectory)'
+
+        - task: AzureWebApp@1
+          inputs:
+            azureSubscription: 'Conexion-Azure-AppService'
+            appType: 'webAppLinux'
+            appName: 'mi-app-web-cicd'
+            package: '$(System.ArtifactsDirectory)/drop/$(Build.BuildId).zip'
+          displayName: 'Desplegar en Azure App Service'
